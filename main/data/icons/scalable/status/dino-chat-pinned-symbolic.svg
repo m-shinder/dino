@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="60.000008mm"
+   height="60mm"
+   viewBox="0 0 60.000008 60"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="dino-pin-icon.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:export-filename="../../Code/vala/dino/main/data/icons/scalable/status/dino-chat-pinned-symbolic.svg"
+   inkscape:export-xdpi="131.70215"
+   inkscape:export-ydpi="131.70215"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.74742565"
+     inkscape:cx="376.62609"
+     inkscape:cy="655.58361"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-89.999994,-130.00001)">
+    <path
+       id="rect111"
+       style="stroke-width:0.264583"
+       d="m 94.982019,154.81155 13.438601,13.43859 -13.638118,15.13481 0.455306,0.45531 15.134822,-13.63811 13.43859,13.43859 13.93153,-28.58364 0.027,0.027 6.38477,-6.38478 -14.23116,-14.23116 -6.38477,6.38478 0.027,0.027 z"
+       sodipodi:nodetypes="ccccccccccccc" />
+  </g>
+</svg>

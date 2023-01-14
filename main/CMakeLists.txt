@@ -40,6 +40,7 @@ set(RESOURCE_LIST
     icons/scalable/mimetypes/dino-file-table-symbolic.svg
     icons/scalable/mimetypes/dino-file-video-symbolic.svg
 
+    icons/scalable/status/dino-chat-pinned-symbolic.svg
     icons/scalable/status/dino-double-tick-symbolic.svg
     icons/scalable/status/dino-microphone-off-symbolic.svg
     icons/scalable/status/dino-microphone-symbolic.svg

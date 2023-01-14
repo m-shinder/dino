@@ -40,19 +40,44 @@ public class ConversationSelector : Widget {
         add_css_class("sidebar");
         list_box.set_header_func(header);
         list_box.set_sort_func(sort);
+        list_box.set_activate_on_single_click(false);
 
         realize.connect(() => {
             ListBoxRow? first_row = list_box.get_row_at_index(0);
             if (first_row != null) {
                 list_box.select_row(first_row);
-                row_activated(first_row);
+                row_selected(first_row);
             }
         });
 
+        list_box.row_selected.connect(row_selected);
         list_box.row_activated.connect(row_activated);
     }
 
     public void row_activated(ListBoxRow r) {
+         ConversationSelectorRow? row = r as ConversationSelectorRow;
+         Conversation conversation = row.conversation;
+        // if converstion is pinned decrease all priorities above it and unpin
+        // else pin it with highest priority
+        if (conversation.pin_priority > 0) {
+            int i = 0;
+            ConversationSelectorRow t = null;
+            do {
+                t = list_box.get_row_at_index(i) as ConversationSelectorRow;
+                t.conversation.pin_priority--;
+                i++;
+            } while (t != row);
+            conversation.pin_priority = 0;
+         } else {
+             var t = list_box.get_row_at_index(0) as ConversationSelectorRow;
+             Conversation top = t.conversation;
+             conversation.pin_priority = top.pin_priority + 1;
+         }
+         row.update_pin_status();
+         list_box.invalidate_sort();
+     }
+
+    public void row_selected(ListBoxRow? r) {
         ConversationSelectorRow? row = r as ConversationSelectorRow;
         if (row != null) {
             conversation_selected(row.conversation);
@@ -75,8 +100,6 @@ public class ConversationSelector : Widget {
     private void add_conversation(Conversation conversation) {
         ConversationSelectorRow row;
         if (!rows.has_key(conversation)) {
-            conversation.notify["pinned"].connect(list_box.invalidate_sort);
-
             row = new ConversationSelectorRow(stream_interactor, conversation);
             rows[conversation] = row;
             list_box.append(row);
@@ -113,7 +136,7 @@ public class ConversationSelector : Widget {
             }
             if (next_select_row != null) {
                 list_box.select_row(next_select_row);
-                row_activated(next_select_row);
+                row_selected(next_select_row);
             }
         }
     }
@@ -121,8 +144,6 @@ public class ConversationSelector : Widget {
     private async void remove_conversation(Conversation conversation) {
         select_fallback_conversation(conversation);
         if (rows.has_key(conversation)) {
-            conversation.notify["pinned"].disconnect(list_box.invalidate_sort);
-
             yield rows[conversation].colapse();
             list_box.remove(rows[conversation]);
             rows.unset(conversation);
@@ -135,7 +156,7 @@ public class ConversationSelector : Widget {
         ListBoxRow? next_select_row = list_box.get_row_at_index(new_index);
         if (next_select_row != null) {
             list_box.select_row(next_select_row);
-            row_activated(next_select_row);
+            row_selected(next_select_row);
         }
     }
 
@@ -153,10 +174,8 @@ public class ConversationSelector : Widget {
         if (cr1 != null && cr2 != null) {
             Conversation c1 = cr1.conversation;
             Conversation c2 = cr2.conversation;
-
-            int pin_comp = c2.pinned - c1.pinned;
-            if (pin_comp != 0) return pin_comp;
-
+            if (c1.pin_priority > c2.pin_priority) return -1;
+            if (c2.pin_priority > c1.pin_priority) return 1;
             if (c1.last_active == null) return -1;
             if (c2.last_active == null) return 1;
             int comp = c2.last_active.compare(c1.last_active);

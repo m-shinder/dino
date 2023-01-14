@@ -16,13 +16,14 @@ public class ConversationSelectorRow : ListBoxRow {
     [GtkChild] protected unowned Label name_label;
     [GtkChild] protected unowned Label time_label;
     [GtkChild] protected unowned Label nick_label;
+    [GtkChild] protected unowned Image pin_icon;
     [GtkChild] protected unowned Label message_label;
     [GtkChild] protected unowned Label unread_count_label;
     [GtkChild] protected unowned Button x_button;
     [GtkChild] protected unowned Revealer time_revealer;
     [GtkChild] protected unowned Revealer xbutton_revealer;
-    [GtkChild] protected unowned Revealer top_row_revealer;
-    [GtkChild] protected unowned Image pinned_image;
+    [GtkChild] protected unowned Revealer unread_count_revealer;
+    [GtkChild] protected unowned Revealer pin_icon_revealer;
     [GtkChild] public unowned Revealer main_revealer;
 
     public Conversation conversation { get; private set; }
@@ -101,12 +102,11 @@ public class ConversationSelectorRow : ListBoxRow {
         x_button.clicked.connect(() => {
             stream_interactor.get_module(ConversationManager.IDENTITY).close_conversation(conversation);
         });
+        pin_icon.visible = conversation.pin_priority > 0;
         image.set_conversation(stream_interactor, conversation);
         conversation.notify["read-up-to-item"].connect(() => update_read());
-        conversation.notify["pinned"].connect(() => { update_pinned_icon(); });
 
         update_name_label();
-        update_pinned_icon();
         content_item_received();
     }
 
@@ -119,6 +119,10 @@ public class ConversationSelectorRow : ListBoxRow {
         update_message_label();
         update_time_label();
         update_read();
+    }
+
+    public void update_pin_status() {
+        pin_icon.visible = (conversation.pin_priority != 0);
     }
 
     public async void colapse() {
@@ -136,10 +140,6 @@ public class ConversationSelectorRow : ListBoxRow {
 
     protected void update_name_label() {
         name_label.label = Util.get_conversation_display_name(stream_interactor, conversation);
-    }
-
-    private void update_pinned_icon() {
-        pinned_image.visible = conversation.pinned != 0;
     }
 
     protected void update_time_label(DateTime? new_time = null) {
@@ -259,11 +259,13 @@ public class ConversationSelectorRow : ListBoxRow {
         StateFlags curr_flags = get_state_flags();
         if ((curr_flags & StateFlags.PRELIGHT) != 0) {
             time_revealer.set_reveal_child(false);
-            top_row_revealer.set_reveal_child(false);
+            unread_count_revealer.set_reveal_child(false);
+            pin_icon_revealer.set_reveal_child(false);
             xbutton_revealer.set_reveal_child(true);
         } else {
             time_revealer.set_reveal_child(true);
-            top_row_revealer.set_reveal_child(true);
+            unread_count_revealer.set_reveal_child(true);
+            pin_icon_revealer.set_reveal_child(true);
             xbutton_revealer.set_reveal_child(false);
         }
     }
