@@ -31,7 +31,7 @@ public interface Application : GLib.Application {
             throw new Error(-1, 0, "Could not create storage dir \"%s\": %s", get_storage_dir(), FileUtils.error_from_errno(errno).to_string());
         }
 
-        this.db = new Database(Path.build_filename(get_storage_dir(), "dino.db"));
+        this.db = new Database(Path.build_filename(get_storage_dir(), "saur.db"));
         this.settings = new Dino.Entities.Settings.from_db(db);
         this.stream_interactor = new StreamInteractor(db);
 
